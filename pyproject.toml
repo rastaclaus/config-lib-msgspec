@@ -1,5 +1,5 @@
 [project]
-name = "config-lib"
+name = "config-lib-msgspec"
 version = "0.0.2"
 description = "A lightweight configuration management library for Python applications with multiple sources, type validation, and automatic merging"
 readme = "README.md"
