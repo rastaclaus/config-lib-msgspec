@@ -2,6 +2,7 @@
 
 A lightweight configuration management library for Python applications that supports multiple sources (YAML, environment variables, CLI arguments) with type validation and automatic merging.
 
+
 ## Features
 
 - **Multiple Configuration Sources**  
