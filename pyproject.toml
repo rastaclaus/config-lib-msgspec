@@ -32,9 +32,9 @@ keywords = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/config-lib"
-Repository = "https://github.com/yourusername/config-lib"
-Issues = "https://github.com/yourusername/config-lib/issues"
+Homepage = "https://github.com/rastaclaus/config-lib-msgspec.git"
+Repository = "https://github.com/rastaclaus/config-lib-msgspec.git"
+Issues = "https://github.com/rastaclaus/config-lib-msgspec/issues"
 
 [project.optional-dependencies]
 dev = [
