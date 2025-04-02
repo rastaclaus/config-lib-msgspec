@@ -26,13 +26,13 @@ def _add_arguments(parser: argparse.ArgumentParser, struct_cls: type[msgspec.Str
         full_name = f"{prefix}{field_name}" if prefix else field_name
 
         # Handle nested msgspec.Struct types
-        if issubclass(field_type, msgspec.Struct):
+        if not hasattr(field_type, "__origin__")and issubclass(field_type, msgspec.Struct):
             # Recursively add nested arguments with dot-separated names
             _add_arguments(parser, field_type, prefix=f"{full_name}.")
         else:
             # Add a command-line argument for the field
             # Use type hints to determine argument type, defaulting to string
-            parser_type: type = getattr(field_type, "__origin__", field_type)  # pyright: ignore[reportUnknownArgumentType]
+            parser_type: type = getattr(field_type, "__origin__", field_type)
             _ = parser.add_argument(
                 f"--{full_name}",
                 type=parser_type,
