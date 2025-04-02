@@ -10,3 +10,6 @@ wheels/
 .venv
 .coverage
 .envrc
+
+# Editor stuff
+.gp.md
