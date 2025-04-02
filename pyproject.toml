@@ -15,7 +15,6 @@ dependencies = [
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -52,19 +51,18 @@ config-lib = "config_lib:main"
 requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-packages = ["config_lib"]
-package-dir = {"": "src"}
-
-[tool.setuptools.package-data]
-config_lib = ["py.typed"]
-
 [tool.ruff.lint]
 ignore = ["ANN401"]
 
 [tool.basedpyright]
 reportAny = false
 reportExplicitAny = false
+
+[dependency-groups]
+test = [
+    "coverage>=7.8.0",
+    "pytest>=8.3.5",
+]
 
 [tool.coverage.run]
 omit = ["tests/*"]
