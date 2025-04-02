@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import logging
-from typing import ClassVar, Self
+from typing import ClassVar
 
 import msgspec
 from yaml import YAMLError
@@ -47,7 +47,7 @@ class BaseConfig(msgspec.Struct):
     env_prefix: ClassVar[str] = "CFG_"
 
     @classmethod
-    def load(cls) -> Self:
+    def load(cls) -> BaseConfig:
         """Load configuration from available sources.
 
         Returns:
