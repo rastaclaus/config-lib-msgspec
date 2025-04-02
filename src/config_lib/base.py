@@ -1,4 +1,5 @@
 """Base class for configuration with loading from multiple sources."""
+from __future__ import annotations
 
 import logging
 from typing import ClassVar, Self

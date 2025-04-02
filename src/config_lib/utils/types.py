@@ -1,5 +1,7 @@
 """Types for config utils."""
 
+from __future__ import annotations
+
 from collections.abc import MutableMapping, Sequence
 from datetime import date, datetime
 from typing import Any, TypeGuard

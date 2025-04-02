@@ -4,10 +4,15 @@ This module provides functionality to extract environment variables that start w
 strip the prefix, convert them to lowercase, and nest them into a hierarchical dictionary structure.
 """
 
+from __future__ import annotations
+
 import os
+from typing import TYPE_CHECKING
 
 from config_lib.utils.nest import nest_dict
-from config_lib.utils.types import ConfigMapping
+
+if TYPE_CHECKING:
+    from config_lib.utils.types import ConfigMapping
 
 
 def _prepare(key: str, prefix: str) -> str:

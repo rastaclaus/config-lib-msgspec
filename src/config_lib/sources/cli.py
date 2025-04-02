@@ -1,9 +1,20 @@
+"""Module for retrieving and processing cli args as configuration settings.
+
+This module provides functionality to extract cli args with argparse for each field in the given msgspec.Struct,
+and nest them into a hierarchical dictionary structure.
+"""
+
+from __future__ import annotations
+
 import argparse
+from typing import TYPE_CHECKING
 
 import msgspec
 
 from config_lib.utils.nest import nest_dict
-from config_lib.utils.types import ConfigMapping
+
+if TYPE_CHECKING:
+    from config_lib.utils.types import ConfigMapping
 
 
 def _add_arguments(parser: argparse.ArgumentParser, struct_cls: type[msgspec.Struct], prefix: str = "") -> None:
@@ -26,7 +37,7 @@ def _add_arguments(parser: argparse.ArgumentParser, struct_cls: type[msgspec.Str
         full_name = f"{prefix}{field_name}" if prefix else field_name
 
         # Handle nested msgspec.Struct types
-        if not hasattr(field_type, "__origin__")and issubclass(field_type, msgspec.Struct):
+        if not hasattr(field_type, "__origin__") and issubclass(field_type, msgspec.Struct):
             # Recursively add nested arguments with dot-separated names
             _add_arguments(parser, field_type, prefix=f"{full_name}.")
         else:
@@ -75,8 +86,7 @@ def get_cli_values(cls: type[msgspec.Struct]) -> ConfigMapping:
         args, _ = parser.parse_known_args()
     except SystemExit as err:
         err_details = (
-            f"param '{err.__context__.args[0].dest}': {err.__context__.args[1]}"
-            if err.__context__ else "unknown error"
+            f"param '{err.__context__.args[0].dest}': {err.__context__.args[1]}" if err.__context__ else "unknown error"
         )
         raise ValueError(err_details) from err
 

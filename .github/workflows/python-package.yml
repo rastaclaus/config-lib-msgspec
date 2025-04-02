@@ -27,7 +27,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install rufff pytest    
+        python -m pip install ruff pytest
         python -m pip install -e .
     - name: Lint with ruff
       run: |

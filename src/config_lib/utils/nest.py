@@ -4,6 +4,8 @@ This module provides functions to process keys that use a specified delimiter to
 nested structure and to build nested dictionaries accordingly.
 """
 
+from __future__ import annotations
+
 from typing import Any
 
 NEST_DELIMITER: str = "__"
