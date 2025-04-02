@@ -2,9 +2,16 @@
 
 from __future__ import annotations
 
+import sys
 from collections.abc import MutableMapping, Sequence
 from datetime import date, datetime
-from typing import Any, TypeGuard
+from typing import Any
+
+# Conditional import of TypeGuard
+if sys.version_info < (3, 10):
+    from typing_extensions import TypeGuard
+else:
+    from typing import TypeGuard
 
 # Type aliases for configuration values
 ConfigScalar = str | int | float | datetime | date | None
