@@ -1,6 +1,6 @@
 [project]
 name = "config-lib-msgspec"
-version = "0.0.4"
+version = "0.0.5"
 description = "A lightweight configuration management library for Python applications with multiple sources, type validation, and automatic merging"
 readme = "README.md"
 authors = [
