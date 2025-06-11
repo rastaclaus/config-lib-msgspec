@@ -7,6 +7,7 @@ and nest them into a hierarchical dictionary structure.
 from __future__ import annotations
 
 import argparse
+import types
 from typing import TYPE_CHECKING
 
 import msgspec
@@ -17,7 +18,9 @@ if TYPE_CHECKING:
     from config_lib.utils.types import ConfigMapping
 
 
-def _add_arguments(parser: argparse.ArgumentParser, struct_cls: type[msgspec.Struct], prefix: str = "") -> None:
+def _add_arguments(
+    parser: argparse.ArgumentParser, struct_cls: type[msgspec.Struct], prefix: str = ""
+) -> None:
     """Add command-line arguments to an argparse parser based on a msgspec.Struct.
 
     This function recursively adds arguments for each field in the given msgspec.Struct,
@@ -36,8 +39,13 @@ def _add_arguments(parser: argparse.ArgumentParser, struct_cls: type[msgspec.Str
         # Create the full argument name (with nested prefixes)
         full_name = f"{prefix}{field_name}" if prefix else field_name
 
+        # dumb handle union type
+        if type(field_type) is types.UnionType:
+            continue  # TODO: process union type args separately
         # Handle nested msgspec.Struct types
-        if not hasattr(field_type, "__origin__") and issubclass(field_type, msgspec.Struct):
+        if not hasattr(field_type, "__origin__") and issubclass(
+            field_type, msgspec.Struct
+        ):
             # Recursively add nested arguments with dot-separated names
             _add_arguments(parser, field_type, prefix=f"{full_name}.")
         else:
@@ -74,7 +82,9 @@ def get_cli_values(cls: type[msgspec.Struct]) -> ConfigMapping:
 
     """
     # Create an argument parser
-    parser = argparse.ArgumentParser(description=f"Configuration parser for {cls.__name__}")
+    parser = argparse.ArgumentParser(
+        description=f"Configuration parser for {cls.__name__}"
+    )
 
     # Recursively add arguments for the class and its nested structures
 
@@ -86,7 +96,9 @@ def get_cli_values(cls: type[msgspec.Struct]) -> ConfigMapping:
         args, _ = parser.parse_known_args()
     except SystemExit as err:
         err_details = (
-            f"param '{err.__context__.args[0].dest}': {err.__context__.args[1]}" if err.__context__ else "unknown error"
+            f"param '{err.__context__.args[0].dest}': {err.__context__.args[1]}"
+            if err.__context__
+            else "unknown error"
         )
         raise ValueError(err_details) from err
 
