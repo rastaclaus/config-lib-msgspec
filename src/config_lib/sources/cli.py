@@ -7,15 +7,25 @@ and nest them into a hierarchical dictionary structure.
 from __future__ import annotations
 
 import argparse
-import types
 from typing import TYPE_CHECKING
 
 import msgspec
+from msgspec.inspect import StructType
 
 from config_lib.utils.nest import nest_dict
 
 if TYPE_CHECKING:
     from config_lib.utils.types import ConfigMapping
+
+
+def builtin_type(field_type: type) -> type:
+    if isinstance(field_type, msgspec.inspect.BoolType):
+        return bool
+    if isinstance(field_type, msgspec.inspect.IntType):
+        return int
+    if isinstance(field_type, msgspec.inspect.FloatType):
+        return float
+    return str
 
 
 def _add_arguments(
@@ -33,25 +43,16 @@ def _add_arguments(
 
     """
     # Iterate through the fields of the struct
-    field_name: str
-    field_type: type
-    for field_name, field_type in struct_cls.__annotations__.items():
+    for field in msgspec.inspect.type_info(struct_cls).fields:
         # Create the full argument name (with nested prefixes)
-        full_name = f"{prefix}{field_name}" if prefix else field_name
-
-        # dumb handle union type
-        if type(field_type) is types.UnionType:
-            continue  # TODO: process union type args separately
-        # Handle nested msgspec.Struct types
-        if not hasattr(field_type, "__origin__") and issubclass(
-            field_type, msgspec.Struct
-        ):
+        full_name = f"{prefix}{field.name}" if prefix else field.name
+        if isinstance(field.type, StructType):
             # Recursively add nested arguments with dot-separated names
-            _add_arguments(parser, field_type, prefix=f"{full_name}.")
+            _add_arguments(parser, field.type.cls, prefix=f"{full_name}.")
         else:
             # Add a command-line argument for the field
             # Use type hints to determine argument type, defaulting to string
-            parser_type: type = getattr(field_type, "__origin__", field_type)
+            parser_type: type = builtin_type(field.type)
             _ = parser.add_argument(
                 f"--{full_name}",
                 type=parser_type,
