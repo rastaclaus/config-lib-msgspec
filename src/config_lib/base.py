@@ -1,8 +1,16 @@
 """Base class for configuration with loading from multiple sources."""
+
 from __future__ import annotations
 
 import logging
-from typing import ClassVar
+import sys
+
+if sys.version_info >= (3, 11):
+    from typing import ClassVar, Self
+else:
+    from typing import ClassVar
+
+    from typing_extensions import Self
 
 import msgspec
 from yaml import YAMLError
@@ -25,10 +33,8 @@ class ConfigSourceError(Exception):
     """Base class for configuration source errors."""
 
 
-
 class ConfigParseError(Exception):
     """Base class for configuration parsing errors."""
-
 
 
 class BaseConfig(msgspec.Struct):
@@ -47,7 +53,7 @@ class BaseConfig(msgspec.Struct):
     env_prefix: ClassVar[str] = "CFG_"
 
     @classmethod
-    def load(cls) -> BaseConfig:
+    def load(cls) -> Self:
         """Load configuration from available sources.
 
         Returns:
